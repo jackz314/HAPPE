@@ -89,6 +89,8 @@
 %% CLEAR THE WORKSPACE
 clear ;
 
+delete_eog_channels = 1;
+
 %% SET PATH TO INCLUDE NECESSARY FOLDERS
 fprintf('Preparing HAPPE...\n') ;
 % SET HAPPE AND EEGLAB PATHS USING THE RUNNING SCRIPT
@@ -780,6 +782,19 @@ for currFile = 1:length(FileNames)
                         dataQC_conds{currFile, i*3-2} = 0 ;
                     end
                 end
+            end
+        end
+
+        %% Reject EOG channels
+        if delete_eog_channels==1
+            eog_channels = {'E1', 'E8', 'E14', 'E21', 'E25', 'E32', 'E17', 'E125', 'E126', 'E127', 'E128'};
+            [chans,chansidx] = ismember(eog_channels, chans_labels);
+            eog_channels_idx = chansidx(chansidx ~= 0);
+            if isempty(eog_channels_idx)==1
+                warning('No frontal channels from the list present in the data to be removed.');
+            else
+                EEG = pop_select( EEG,'nochannel', eog_channels_idx);
+                EEG = eeg_checkset( EEG );
             end
         end
          
