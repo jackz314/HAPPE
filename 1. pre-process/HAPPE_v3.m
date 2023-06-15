@@ -409,8 +409,15 @@ for currFile = 1:length(FileNames)
                 % ---------------------------------------------------------
                 % .MFF FILES
                     elseif params.loadInfo.inputFormat == 5
-                        EEGraw = pop_mffimport(FileNames{currFile} , ...
-                            params.loadInfo.typeFields, 0, 0) ;
+                        try
+                            EEGraw = pop_mffimport(FileNames{currFile} , ...
+                                params.loadInfo.typeFields, 0, 0) ;
+                        catch E
+                            % retry without events code
+                            disp('Retry loading without events code')
+                            EEGraw = pop_mffimport(FileNames{currFile} , ...
+                                {}, 0, 0) ;
+                        end
                 % ---------------------------------------------------------
                 % .EDF FILES
                     elseif params.loadInfo.inputFormat == 6
