@@ -794,7 +794,11 @@ for currFile = 1:length(FileNames)
 
         %% Reject EOG channels
         if delete_eog_channels==1
-            eog_channels = {'E1', 'E8', 'E14', 'E21', 'E25', 'E32', 'E17', 'E125', 'E126', 'E127', 'E128'};
+            chans_labels=cell(1,EEG.nbchan);
+            for i=1:EEG.nbchan
+                chans_labels{i}= EEG.chanlocs(i).labels;
+            end
+            eog_channels = {'E1', 'E8', 'E14', 'E17', 'E21', 'E25', 'E32', 'E125', 'E126', 'E127', 'E128'};
             [chans,chansidx] = ismember(eog_channels, chans_labels);
             eog_channels_idx = chansidx(chansidx ~= 0);
             if isempty(eog_channels_idx)==1
@@ -1101,6 +1105,7 @@ for currFile = 1:length(FileNames)
             wavMeans = qm_ERROR(wavMeans, 5+length(params.QCfreqs), ...
                 currFile) ;
         end
+        rethrow(ME);
     end
 end
 
