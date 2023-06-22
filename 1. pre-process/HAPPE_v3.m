@@ -806,6 +806,8 @@ for currFile = 1:length(FileNames)
             else
                 EEG = pop_select( EEG,'nochannel', eog_channels_idx);
                 EEG = eeg_checkset( EEG );
+                % remove EOG channels from original channel list
+                origChans = origChans(~ismember({origChans.labels}, eog_channels));
             end
         end
          
